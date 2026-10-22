@@ -101,7 +101,7 @@ function previewMon(base,natureId='',countMode=''){
  p.skillCount=countMode==='tm'?p.tmCount:countMode==='all'?p.totalCount:p.naturalCount;return p;
 }
 function eligibleMoves(p,f){const pool=f.learnSource==='tm'?p.tmMoves:f.learnSource==='all'?[...p.moves,...p.tmMoves]:p.moves;return pool.filter(id=>{const d=DB.moves[id].detail;return(!f.learnKind||d.kind===f.learnKind)&&(!f.learnCategory||(f.learnCategory==='buff'?d.kind==='buff':d.cat===f.learnCategory));});}
-function abilityCards(p){return p.abilitySlots.map((id,i)=>{if(!id)return '';const a=DB.abilities[id];return `<div class="skillcard"><div class="skillheading">${i===2?'隱藏特性':'一般特性 '+(i+1)} · ${escapeHTML(a.name)}</div><p class="skilldesc">${escapeHTML(a.desc)}</p>${a.generic||a.plus?`<p class="skilldesc"><span class="weightbadge">${a.plus?'額外':'通用效果'}：主屬性 ${TYPES[p.types[0]][0]} 招式傷害 ×1.08</span></p>`:''}</div>`;}).join('');}
+function abilityCards(p){return p.abilitySlots.map((id,i)=>{if(!id)return '';const a=DB.abilities[id];return `<div class="skillcard"><div class="skillheading">${i===2?'隱藏特性':'一般特性 '+(i+1)} · ${escapeHTML(a.name)}</div><p class="skilldesc">${escapeHTML(abilityText(id))}</p>${a.generic||a.plus?`<p class="skilldesc"><span class="weightbadge">${a.plus?'額外':'通用效果'}：主屬性 ${TYPES[p.types[0]][0]} 招式傷害 ×1.08</span></p>`:''}</div>`;}).join('');}
 function showMon(dex,natureId=$('nature').value){
  const base=DB.pokemon.find(p=>p.dex===Number(dex));if(!base)return;
  const p=previewMon(base,natureId),own=p.moves.filter(id=>DB.moves[id].type!=='normal'),common=p.moves.filter(id=>DB.moves[id].type==='normal');
@@ -151,6 +151,18 @@ function renderTms(){const ids=filteredTms();$('tmCount').textContent=ids.length
 const EFFECTS={damage:'傷害',defense:'減傷／防護',heal:'回復',hp:'最大血量',speed:'移速',crit:'暴擊',control:'控制／反擊',weather:'天氣',loot:'拾取／金幣'};
 const TARGETS={all:'全招式',physical:'物理',special:'特殊',type:'指定屬性',kind:'指定攻擊方式／招式'};
 const CONDITIONS={always:'無條件',low:'低血量',high:'高血量',kill:'擊殺累積',weather:'天氣',hurt:'受傷／被控制',noitem:'未持道具',other:'時間／敵人／其他條件'};
+function abilityText(id){
+ const patterns={
+  'iron-fist':[/punch/,'拳類招式',1.25],
+  'strong-jaw':[/bite|fang|crunch|jaw/,'咬合類招式',1.3],
+  'mega-launcher':[/pulse|aura-sphere/,'波動與波導彈類招式',1.3],
+  sharpness:[/cut|slash|blade|razor|scissor|sword/,'切割類招式',1.3],
+  'punk-rock':[/voice|buzz|boom|noise|sing|echo|uproar|snarl/,'聲音類招式',1.3]
+ };
+ if(patterns[id]){const [pattern,label,k]=patterns[id],names=Object.entries(DB.moves).filter(([mid])=>pattern.test(mid)).map(([,m])=>m.name);return `${label}傷害 ×${k}。本遊戲適用招式：${names.length?names.join('、'):'目前沒有符合的招式'}。依遊戲內部招式名稱判定，進化後沿用原招式判定。`;}
+ const replacements={technician:'招式原始基礎傷害 ≤12 時，傷害 ×1.35；若無原始資料，改用當前傷害判定。','skill-link':'當前招式的數量大於 2，或招式帶有彈跳時，傷害 ×1.25。',reckless:'衝刺類招式傷害 ×1.25。','tough-claws':'近身扇形與衝刺類招式傷害 ×1.25。'};
+ return (replacements[id]||DB.abilities[id].desc).replace(/HP/g,'血量');
+}
 const ABILITY_MULT={};
 function abilityMult(ids,k){for(const id of ids.split(' '))ABILITY_MULT[id]=k;}
 abilityMult('huge-power pure-power schooling',1.5);abilityMult('water-bubble solar-power',1.4);
@@ -201,14 +213,14 @@ function wirePicker(id,read,write,options,onChange){
 function resetPicker(id,write){write([]);$(id+'Choices').querySelectorAll('input').forEach(x=>x.checked=false);$(id+'Summary').textContent='不限';$(id+'Picker').open=false;}
 function abilityOwners(id,slot=''){return DB.pokemon.filter(p=>p.abilitySlots.some((v,i)=>v===id&&(!slot||(slot==='hidden'?i===2:i<2))));}
 function filteredAbilities(){const q=$('abilitySearch').value.trim(),target=$('abilityTarget').value,cond=$('abilityCondition').value,bonus=$('abilityBonus').value,impl=$('abilityImplementation').value,slot=$('abilitySlot').value;
- return Object.keys(DB.abilities).filter(id=>{const a=DB.abilities[id],m=ABILITY_META[id];return(!q||`${a.name} ${a.desc} ${a.generic||a.plus?'主屬性 傷害 8%':''}`.includes(q))&&(!abilityEffects.length||abilityEffects.some(c=>m.cats.includes(c)))&&(!target||m.targets.includes(target))&&(!cond||m.conds.includes(cond))&&(!bonus||(bonus==='yes')===(a.generic||a.plus))&&(!impl||(impl==='generic')===a.generic)&&(!slot||abilityOwners(id,slot).length);}).sort((a,b)=>{
+ return Object.keys(DB.abilities).filter(id=>{const a=DB.abilities[id],m=ABILITY_META[id];return(!q||`${a.name} ${abilityText(id)} ${a.generic||a.plus?'主屬性 傷害 8%':''}`.includes(q))&&(!abilityEffects.length||abilityEffects.some(c=>m.cats.includes(c)))&&(!target||m.targets.includes(target))&&(!cond||m.conds.includes(cond))&&(!bonus||(bonus==='yes')===(a.generic||a.plus))&&(!impl||(impl==='generic')===a.generic)&&(!slot||abilityOwners(id,slot).length);}).sort((a,b)=>{
  const mode=$('abilitySort').value;if(mode==='damage')return(ABILITY_META[b].mult||0)-(ABILITY_META[a].mult||0)||DB.abilities[a].name.localeCompare(DB.abilities[b].name,'zh-Hant');
  if(mode==='defense')return(DEFENSE_MULT[a]??2)-(DEFENSE_MULT[b]??2)||DB.abilities[a].name.localeCompare(DB.abilities[b].name,'zh-Hant');
  if(mode==='owners')return abilityOwners(b).length-abilityOwners(a).length;return DB.abilities[a].name.localeCompare(DB.abilities[b].name,'zh-Hant');
  });
 }
 function renderAbilities(){const ids=filteredAbilities();$('abilityCount').textContent=ids.length;$('abilityCards').innerHTML=ids.map(id=>{const a=DB.abilities[id],m=ABILITY_META[id],owners=abilityOwners(id),normal=abilityOwners(id,'normal').length,hidden=abilityOwners(id,'hidden').length;
- return `<article class="movearticle"><div class="movehead"><h3>${escapeHTML(a.name)}</h3><span class="movepill">${a.generic?'通用效果':'專屬效果'}</span></div><p>${escapeHTML(a.desc)}</p>${a.generic||a.plus?'<p class="weightbadge">'+(a.plus?'另有':'通用效果：')+'主屬性招式傷害 ×1.08</p>':''}<p class="small">效果：${m.cats.map(c=>EFFECTS[c]).join('、')||'其他'}<br>條件：${m.conds.map(c=>CONDITIONS[c]).join('、')}${m.targets.length?'<br>加成對象：'+m.targets.map(t=>TARGETS[t]).join('、'):''}</p>${m.mult?`<p class="small">可直接比較的傷害倍率上限：×${m.mult}（條件成立時${a.plus?'，另有主屬性 ×1.08':''}）</p>`:''}${DEFENSE_MULT[id]!=null?`<p class="small">條件成立時承傷最低倍率：×${DEFENSE_MULT[id]}（減傷 ${Math.round((1-DEFENSE_MULT[id])*100)}%）</p>`:''}<button data-ability-owners="${id}">可擁有寶可夢 · ${owners.length} 隻</button><p class="small">一般特性 ${normal} 隻 · 隱藏特性 ${hidden} 隻</p></article>`;}).join('')||'<div class="empty">沒有符合的特性，請放寬篩選。</div>';}
+ return `<article class="movearticle"><div class="movehead"><h3>${escapeHTML(a.name)}</h3><span class="movepill">${a.generic?'通用效果':'專屬效果'}</span></div><p>${escapeHTML(abilityText(id))}</p>${a.generic||a.plus?'<p class="weightbadge">'+(a.plus?'另有':'通用效果：')+'主屬性招式傷害 ×1.08</p>':''}<p class="small">效果：${m.cats.map(c=>EFFECTS[c]).join('、')||'其他'}<br>條件：${m.conds.map(c=>CONDITIONS[c]).join('、')}${m.targets.length?'<br>加成對象：'+m.targets.map(t=>TARGETS[t]).join('、'):''}</p>${m.mult?`<p class="small">可直接比較的傷害倍率上限：×${m.mult}（條件成立時${a.plus?'，另有主屬性 ×1.08':''}）</p>`:''}${DEFENSE_MULT[id]!=null?`<p class="small">條件成立時承傷最低倍率：×${DEFENSE_MULT[id]}（減傷 ${Math.round((1-DEFENSE_MULT[id])*100)}%）</p>`:''}<button data-ability-owners="${id}">可擁有寶可夢 · ${owners.length} 隻</button><p class="small">一般特性 ${normal} 隻 · 隱藏特性 ${hidden} 隻</p></article>`;}).join('')||'<div class="empty">沒有符合的特性，請放寬篩選。</div>';}
 function tmTypeMatches(m){return !tmTypes.length||tmTypes.includes(m.type);}
 function filteredTms(){const q=$('tmSearch').value.trim().toLowerCase(),mon=$('tmMonSearch').value.trim().toLowerCase().replace(/^#/,''),kind=$('tmKind').value,cat=$('tmCategory').value,mode=$('tmScope').value||'extra';return Object.keys(DB.tmCompatibility).filter(id=>{const m=DB.moves[id];return m&&(!q||`${id} ${m.name} ${m.desc}`.toLowerCase().includes(q))&&tmTypeMatches(m)&&(!kind||m.detail.kind===kind)&&(!cat||(cat==='buff'?m.detail.kind==='buff':m.detail.cat===cat))&&(!mon||tmCompatible(id,mode).some(p=>tmMonMatches(p,mon)));}).sort((a,b)=>$('tmSort').value==='low'?DB.tmPrice[a]-DB.tmPrice[b]:$('tmSort').value==='high'?DB.tmPrice[b]-DB.tmPrice[a]:DB.moves[a].name.localeCompare(DB.moves[b].name,'zh-Hant'));}
 function ownerBase(){if(!ownerContext)return[];return ownerContext.kind==='tm'?tmCompatible(ownerContext.id,'all'):abilityOwners(ownerContext.id);}
