@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f5ebd8">
+<meta name="theme-color" content="#194e40">
 <meta name="color-scheme" content="light">
 <title>2026 台南親子包棟聖誕小旅行</title>
 <style>
@@ -336,126 +336,34 @@ a:focus-visible,button:focus-visible,summary:focus-visible{outline-color:#1459a3
 }
 @media print{.bottom,.skip-link{display:none}.wrap{padding-bottom:0}}
 
-/* Travel notebook theme */
-:root{
-  --cream:#f5ebd8;
-  --paper:#fffaf0;
-  --ink:#38291f;
-  --muted:#655447;
-  --teal:#356151;
-  --teal2:#56816c;
-  --blue:#365a70;
-  --line:#d9cbb4;
-  --shadow:0 5px 0 #7f583016,0 12px 27px #6f492b14;
-  --shadow-soft:0 3px 0 #7f583015;
-  --radius:14px 18px 14px 18px;
-}
-body{
-  background-color:var(--cream);
-  background-image:radial-gradient(#88644222 .65px,transparent .8px);
-  background-size:6px 6px;
-}
-.hero{
-  margin:14px 0 0;
-  padding:30px clamp(18px,5vw,38px);
-  border:1px solid #c4af90;
-  border-radius:9px 23px 19px 13px;
-  color:var(--ink);
-  background:repeating-linear-gradient(0deg,transparent 0 26px,#997d4e16 26px 27px),var(--paper);
-  box-shadow:var(--shadow);
-}
-.hero::before{
-  content:"";
-  position:absolute;
-  top:0;
-  right:clamp(16px,6vw,48px);
-  width:76px;
-  height:18px;
-  background:#e8b986a6;
-  transform:rotate(8deg);
-}
-.hero::after{content:none}
-h1,.day h3,.section-title h2,.spot-card h4{
-  font-family:"Kaiti TC","DFKai-SB","Noto Serif TC",serif;
-  font-weight:800;
-}
-h1{font-size:clamp(1.9rem,6.5vw,3.4rem);line-height:1.18}
-.kicker{color:#7b3729}
-.subtitle{color:#4f4235}
-.badge{border-color:#d6c1a4;background:#f8edda;backdrop-filter:none;color:#664333}
-.badge:first-child{background:#ead1a8;color:#53331e}
-.info-card,.quick a,.day,.tool,.packing,.spot-card{
-  background:var(--paper);
-  border-color:var(--line);
-}
-.info-card,.quick a{border-radius:8px 12px 9px 11px}
-.quick a[aria-selected="true"],.bottom a[aria-current="page"]{
-  background:#dce9db;
-  color:#244b3d;
-  box-shadow:inset 0 0 0 1px #7b9b84;
-}
-.day{padding:clamp(14px,4vw,26px)}
-.date{
-  display:inline-block;
-  padding:3px 8px;
-  margin-bottom:4px;
-  background:#efdbc0;
-  color:#6d3827;
-  transform:rotate(-1.5deg);
-}
-.theme{background:#ede5d2;color:#584631}
-.scenic{
-  min-height:136px;
-  padding:15px clamp(12px,4vw,22px);
-  align-items:center;
-  color:var(--ink);
-  background:repeating-linear-gradient(0deg,transparent 0 24px,#5d514317 24px 25px),var(--scene-paper);
-  border:1px dashed var(--scene-ink);
-  border-radius:9px 14px 8px 13px;
-}
-.scenic .copy{width:100%;padding-right:80px}
-.scenic strong{max-width:none}
-.scenic .eyebrow,.scenic small{opacity:1;color:var(--scene-ink)}
-.zoo{--scene-paper:#e7edda;--scene-ink:#415b35}
-.lotus{--scene-paper:#e4edf0;--scene-ink:#345b6b}
-.qijin{--scene-paper:#f6e4d5;--scene-ink:#784032}
-.scenic::before,.scenic::after{content:none}
-.destination-stamp{
-  position:absolute;
-  top:50%;
-  right:12px;
-  width:65px;
-  aspect-ratio:1;
-  display:grid;
-  place-items:center;
-  font-size:2rem;
-  border:3px double var(--scene-ink);
-  border-radius:46% 53% 48% 51%;
-  color:var(--scene-ink);
-  transform:translateY(-50%) rotate(9deg);
-}
-.time,.place,.note{color:#594536}
-.rail::before{background:#d8c8ad}
-.dot{background:var(--teal);border-color:#dce7d9;box-shadow:0 0 0 2px var(--paper)}
-.tag{background:#e5ecdd;color:#315440}
-.nav:not(.soft):not(.teal){background:var(--blue)}
-.nav.soft{background:#e4ebed;color:#2e5163}
-.stay,.highlight,.spot-intro{background:#f5e8d0;border-color:#d9c4a2}
-.opt.chill,.opt.play,.opt.shop{background:#f8f1e0}
-.bottom{background:#fffaf2f7;border-color:#d2bea1;border-radius:13px 16px 13px 16px}
-.bottom a{color:#514130}
-a:focus-visible,button:focus-visible,summary:focus-visible{outline-color:#356151}
-@media(max-width:390px){
-  .hero{margin-inline:0;padding-inline:16px}
-  .bottom a{font-size:.8125rem}
-}
-@media print{
-  .hero{color:var(--ink);background:var(--paper)!important}
-}
+
+/* Christmas cover and daily itinerary */
+body{background:#f4f7f6;color:#203630}
+.hero{background:radial-gradient(ellipse at 90% 0%,#daae6066,transparent 45%),linear-gradient(115deg,#113c32,#205743);border-bottom:5px solid #c89f59;padding:34px 22px 26px}
+.hero:after{content:"✧  ✦  ✧";color:#ffe6ab;opacity:.9}
+.hero h1{font-family:Georgia,"Noto Serif TC",serif;font-size:clamp(2rem,6vw,3rem);line-height:1.18}
+.hero .kicker{color:#f6d99e}
+.hero .badge:first-child{background:#80343f;color:white}
+.info-card,.day,.spot-card,.tool,.packing{background:white;border:1px solid #dce5e1;border-radius:14px;box-shadow:0 3px 12px #19392d09}
+.quick a[aria-selected=true],.bottom a[aria-current=page]{background:#194e40;color:white}
+.quick a[aria-selected=true] span{color:#e0eee7}
+.dayhead{align-items:center}
+.date{color:#8a3542;font-size:.9rem}
+.scenic{min-height:0;padding:12px 14px;background:#edf5ef;color:#244b3c;border-radius:9px}
+.scenic::before,.scenic::after,.destination-stamp,.scenic .eyebrow{display:none}
+.scenic strong{font-size:1rem;max-width:none}
+.item{padding-block:16px}
+.time{color:#235340}
+.dot{background:#306c55;border-color:#dfebe3}
+.rail:before{background:#c9dace;top:-17px;bottom:-17px}
+.content .nav,.nav:not(.soft):not(.teal){background:#21614c;color:white;box-shadow:none}
+.content .nav{margin-top:8px}
+.highlight{background:#fff4ed;border-color:#e9d2bc}
+@media(min-width:620px){.content:has(>.nav){display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:14px}.content:has(>.nav)>*{grid-column:1}.content:has(>.nav)>.nav{grid-column:2;grid-row:1/span 3;align-self:center}}
 </style>
 </head>
 <body><a class="skip-link" href="#day1">跳到第一天行程</a><div class="wrap" id="top">
-<header class="hero"><div class="kicker">台南・嘉義｜親子旅行手帳</div><h1>2026 台南親子包棟<br>聖誕小旅行 🎄</h1><div class="subtitle">3天2夜｜台南一起玩・嘉義順遊回家</div><div class="hero-badges"><div class="badge">12/25（五）– 12/27（日）</div><div class="badge">👶 親子同行</div><div class="badge">🏠 包棟住宿</div><div class="badge">🎁 交換禮物</div></div></header>
+<header class="hero"><div class="kicker">台南・嘉義｜家庭聖誕假期</div><h1>2026 台南親子包棟<br>聖誕小旅行 🎄</h1><div class="subtitle">3天2夜｜台南一起玩・嘉義順遊回家</div><div class="hero-badges"><div class="badge">12/25（五）– 12/27（日）</div><div class="badge">👶 親子同行</div><div class="badge">🏠 包棟住宿</div><div class="badge">🎁 交換禮物</div></div></header>
 <div class="info-grid"><div class="info-card"><b>🚗 路線</b><span>台南 → 嘉義 → 南投</span></div><div class="info-card"><b>🏠 住宿區域</b><span>台南安平｜包棟民宿</span></div><div class="info-card"><b>🎄 第一晚</b><span>民宿聖誕交換禮物</span></div><div class="info-card"><b>🕒 行程節奏</b><span>以時段安排，保留彈性</span></div></div>
 <div class="quick"><a href="#day1">DAY 1<span>頑皮世界・聖誕夜</span></a><a href="#day2">DAY 2<span>貨櫃公園・安平</span></a><a href="#day3">DAY 3<span>絨毛玩偶・返家</span></a></div>
 <section class="section" id="stay"><div class="section-title"><h2>🏠 我們的基地</h2><small>安平包棟住宿</small></div><div class="stay"><h3>台南安平｜包棟民宿</h3><p>臺南市安平區民權路四段391弄1弄16號</p><a class="nav teal" href="https://www.google.com/maps/dir/?api=1&amp;destination=%E8%87%BA%E5%8D%97%E5%B8%82%E5%AE%89%E5%B9%B3%E5%8D%80%E6%B0%91%E6%AC%8A%E8%B7%AF%E5%9B%9B%E6%AE%B5391%E5%BC%841%E5%BC%8416%E8%99%9F&amp;travelmode=driving" target="_blank" rel="noopener">📍 Google 導航至民宿</a><p>第一天遊園後入住民宿，晚上交換禮物。入住時間待確認。</p></div></section>
